@@ -6,8 +6,7 @@ import base64
 from io import BytesIO
 from PIL import Image
 import numpy as np
-
-from hand import HandSwipeDetector
+from hand1 import HandDetector
 
 app = Flask(__name__)
 
@@ -15,8 +14,8 @@ app = Flask(__name__)
 data_store = []
 data_event = threading.Event()
 
-detector = HandSwipeDetector()
-
+detector = HandDetector()
+last_action_time = 0
 def data_url_to_image(data_url):
     # Split the data URL to get the base64 part
     header, base64_data = data_url.split(",", 1)
@@ -56,17 +55,24 @@ def poll():
     return get_data()
 
 @app.route('/send', methods=['POST'])
-def send():
+async def send():
+    global last_action_time
+
+    current_time = time.time()
+    # if current_time - last_action_time < 1:
+    #     return jsonify({'status': 'No action'}), 200
     data = request.json
     data_store.append(data)
-    # print(data)
+    
+    # Process the image data
     image = data_url_to_image(data)
     image_np = pillow_image_to_opencv(image)
 
-    action = detector.detect_swipe(image_np)
+    # Custom timestamp management
+    action = await detector.gestureControl(image_np)
 
     data_event.set()
-    return jsonify({'status': 'data received','action' : action}), 200
+    return jsonify({'status': 'data received', 'action': action}), 200
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)

@@ -1,6 +1,6 @@
 {
     "manifest_version": 3,
-    "name": "Air Swipe",
+    "name": "GestureFlow",
     "version": "1.0",
     "permissions": [
         "activeTab",

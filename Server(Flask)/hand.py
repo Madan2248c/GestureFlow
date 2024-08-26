@@ -3,7 +3,6 @@ import mediapipe as mp
 
 class HandSwipeDetector:
     def __init__(self, min_detection_confidence=0.7, min_tracking_confidence=0.7):
-        # Initialize MediaPipe Hands and OpenCV video capture
         self.mp_hands = mp.solutions.hands
         self.mp_drawing = mp.solutions.drawing_utils
         self.hands = self.mp_hands.Hands(min_detection_confidence=min_detection_confidence, min_tracking_confidence=min_tracking_confidence)
@@ -43,29 +42,29 @@ class HandSwipeDetector:
 
         return "no"
 
-# def main():
-#     detector = HandSwipeDetector()
-#     cap = cv2.VideoCapture(0)
+def main():
+    detector = HandSwipeDetector()
+    cap = cv2.VideoCapture(0)
 
-#     while cap.isOpened():
-#         ret, frame = cap.read()
-#         if not ret:
-#             break
+    while cap.isOpened():
+        ret, frame = cap.read()
+        if not ret:
+            break
 
-#         # Flip the frame horizontally for a later selfie-view display
-#         frame = cv2.flip(frame, 1)
+        # Flip the frame horizontally for a later selfie-view display
+        frame = cv2.flip(frame, 1)
 
-#         # Detect swipe
-#         frame = detector.detect_swipe(frame)
+        # Detect swipe
+        frame = detector.detect_swipe(frame)
 
-#         # Display the frame
-#         cv2.imshow('Hand Swipe Detection', frame)
+        # Display the frame
+        cv2.imshow('Hand Swipe Detection', frame)
 
-#         if cv2.waitKey(1) & 0xFF == 27:  # Exit on ESC key
-#             break
+        if cv2.waitKey(1) & 0xFF == 27:  # Exit on ESC key
+            break
 
-#     cap.release()
-#     cv2.destroyAllWindows()
+    cap.release()
+    cv2.destroyAllWindows()
 
 # if __name__ == "__main__":
 #     main()
